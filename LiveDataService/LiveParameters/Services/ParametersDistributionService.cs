@@ -1,0 +1,40 @@
+﻿using LiveDataService.LiveParameters.Hubs;
+using LiveDataService.LiveParameters.Models;
+using LiveDataService.LiveParameters.Models.Dtos;
+using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace LiveDataService.LiveParameters.Services
+{
+    public class ParametersDistributionService
+    {
+        private ClientConnectionHandler _connectionHandler;
+        private IHubContext<ParametersHub> _hubContext;
+        public ParametersDistributionService(ClientConnectionHandler connectionHandler, IHubContext<ParametersHub> hubContext) 
+        { 
+            _connectionHandler = connectionHandler;
+            _hubContext = hubContext;
+        }
+
+        public async Task ProccessTeleData(string JTeleData)
+        {
+            var telemetryFrame = JsonConvert.DeserializeObject<TelemetryFrameDto>(JTeleData);
+            foreach(ClientConnection client in _connectionHandler.GetConnectedClients())
+            {
+                IEnumerable<TelemetryParameterDto> requestedParameters = 
+                    telemetryFrame.Parameters.Where(parameter => client.ParameterNames.Contains(parameter.Name));
+
+                await _hubContext.Clients.Client(client.ConnectionId).SendAsync(
+                    "receiveParameters",
+                    requestedParameters
+                    );
+            }
+                
+
+        }
+    }
+}

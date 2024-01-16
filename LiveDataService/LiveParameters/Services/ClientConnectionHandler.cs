@@ -4,6 +4,7 @@ using LiveDataService.LiveParameters.Models.Dtos;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json.Serialization;
 
@@ -11,43 +12,49 @@ namespace LiveDataService.LiveParameters.Services
 {
     public class ClientConnectionHandler
     {
-        private readonly List<ClientConfig> _clientConfigurations;
-        private readonly Dictionary<ClientConfig, string> _connectedClients;
+        private readonly List<ClientConnection> _clientConnections;
 
         public ClientConnectionHandler() 
         {
-            _clientConfigurations = new List<ClientConfig>();
-            _connectedClients = new Dictionary<ClientConfig, string>();
+            _clientConnections = new List<ClientConnection>();
         }
 
-        public void ConfigClient(ClientConfig client)
+        public void ConfigClient(ClientConnection client)
         {
-            _clientConfigurations.Add(client);
+            _clientConnections.Add(client);
         }
 
-        public void DeleteClientConfig(ClientConfig client)
+        public void DeleteClientConfig(string clientId)
         {
-            _clientConfigurations.Remove(client);
+            var client = _clientConnections.Find(client => client.ClientId == clientId);
+            if (client != null) 
+            { 
+                _clientConnections.Remove(client);
+            }
         }
 
         public bool ConnectClient(string clientId, string connectionId)
         {
-            var client = _clientConfigurations.Find(client => client.ConnectionId == clientId);
-
-            if(client != null) 
-            {
-                _connectedClients.Add(client, connectionId);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var client = _clientConnections.Find(client => client.ClientId == clientId);
+            client?.Connect(connectionId);
+            return client != null;
         }
 
-        public void DisconnectClient(ClientConfig client)
+        public void DisconnectClient(string connectionId)
         {
-            _connectedClients.Remove(client);
+            var client = _clientConnections.Find(client => client.ConnectionId == connectionId);
+            client?.Disconnect();
         }
+
+        public IEnumerable<ClientConnection> GetConnectedClients()
+        {
+            return _clientConnections.Where(client => client.IsConnected());
+        }
+
+        public ClientConnection GetClientConnection(string connectionId)
+        {
+            return _clientConnections.Find(client => client.ConnectionId == connectionId);
+        }
+
     }
 }

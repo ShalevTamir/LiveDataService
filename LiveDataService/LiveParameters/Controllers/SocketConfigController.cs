@@ -22,12 +22,12 @@ namespace LiveDataService.LiveParameters.Controllers
         [HttpPost]
         public ActionResult InitiateSocket([FromBody] ParametersListDto parametersList)
         {
-            ClientConfig client = new ClientConfig(parametersList.ParameterNames); 
+            ClientConnection client = new ClientConnection(parametersList.ParameterNames); 
             _clientConnectionHandler.ConfigClient(client);
 
             return Ok(
                 JsonConvert.SerializeObject(
-                    new ClientConnectionId() { ConnectionId = client.ConnectionId }
+                    new ClientConnectionId() { ConnectionId = client.ClientId }
                     )
                 );
         }
