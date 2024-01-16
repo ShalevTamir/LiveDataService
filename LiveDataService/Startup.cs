@@ -23,7 +23,7 @@ namespace LiveDataService
             services.AddControllers();
 
             services.AddSingleton<KafkaConsumerService>();
-            services.AddSingleton<ParametersFilterService>();
+            services.AddSingleton<ClientConnectionHandler>();
             services.AddHostedService<StartupService>();
 
             services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
@@ -32,7 +32,7 @@ namespace LiveDataService
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()
-                .WithOrigins("http://localhost:4200/");
+                .WithOrigins("http://localhost:4200");
             }));
             services.AddSignalR()
                 .AddJsonProtocol(options => {

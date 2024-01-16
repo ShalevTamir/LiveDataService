@@ -9,8 +9,8 @@ namespace LiveDataService.LiveParameters.Services
     public class StartupService : IHostedService
     {
         private KafkaConsumerService _kafkaConsumerService;
-        private ParametersFilterService _parametersFilterService;
-        public StartupService(KafkaConsumerService kafkaConsumerService, ParametersFilterService parametersFilterService)
+        private ClientConnectionHandler _parametersFilterService;
+        public StartupService(KafkaConsumerService kafkaConsumerService, ClientConnectionHandler parametersFilterService)
         {
             _kafkaConsumerService = kafkaConsumerService;
             _parametersFilterService = parametersFilterService;
@@ -18,7 +18,7 @@ namespace LiveDataService.LiveParameters.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _kafkaConsumerService.StartConsumer(_parametersFilterService.ProcessTeleData);
+            //_kafkaConsumerService.StartConsumer(_parametersFilterService.ProcessTeleData);
             return Task.CompletedTask;
         }
 
