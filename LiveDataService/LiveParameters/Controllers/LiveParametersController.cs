@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LiveDataService.LiveParameters.Hubs;
+using LiveDataService.LiveParameters.Models.Dtos;
+using LiveDataService.LiveParameters.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 
 namespace LiveDataService.LiveParameters.Controllers
 {
@@ -11,29 +11,18 @@ namespace LiveDataService.LiveParameters.Controllers
     [ApiController]
     public class LiveParametersController : Controller
     {
-        [HttpGet()]
-        public async Task GetParameters()
+        private readonly ParametersFilterService _parametersFilterService;
+
+        public LiveParametersController(IHubContext<ParametersHub> hub, ParametersFilterService parametersFilterService)
         {
-            if(HttpContext.WebSockets.IsWebSocketRequest)
-            {
-                using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+            _parametersFilterService = parametersFilterService;
+        }
 
-                string message = "This is a message from the socket";
-                byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-                var arraySegment = new ArraySegment<byte>(messageBytes, 0, messageBytes.Length);
-                await webSocket.SendAsync(
-                    arraySegment,
-                    System.Net.WebSockets.WebSocketMessageType.Text,
-                    true,
-                    CancellationToken.None
-                    );
-
-
-            }
-            else
-            {
-                HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            }
+        [HttpGet]
+        public ActionResult InitiateSocket(ParametersListDto parametersList)
+        {
+            
+            return Ok(JsonConvert.SerializeObject(parametersList));
         }
     }
 }

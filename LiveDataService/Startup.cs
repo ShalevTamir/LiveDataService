@@ -7,6 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using LiveDataService.LiveParameters.Hubs;
+using LiveDataService.LiveParameters.Services;
+using LiveDataService.Consumer.Services;
 
 namespace LiveDataService
 {
@@ -17,6 +21,24 @@ namespace LiveDataService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddSingleton<KafkaConsumerService>();
+            services.AddSingleton<ParametersFilterService>();
+            services.AddHostedService<StartupService>();
+
+            services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+            {
+                builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .WithOrigins("http://localhost:4200/");
+            }));
+            services.AddSignalR()
+                .AddJsonProtocol(options => {
+                    options.PayloadSerializerOptions.PropertyNamingPolicy = null;
+                });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -28,10 +50,12 @@ namespace LiveDataService
             }
 
             app.UseRouting();
-            app.UseWebSockets();
+
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ParametersHub>("/live-parameters-socket");
                 endpoints.MapControllers();
             });
         }
