@@ -19,8 +19,7 @@ namespace LiveDataService.LiveParameters.Hubs
         {
             string clientId = _connectionHandler.GetClientConnection(Context.ConnectionId).ClientId;
             _connectionHandler.DisconnectClient(Context.ConnectionId);
-            Task.Delay(TimeSpan.FromSeconds(5)).ContinueWith((task) => _connectionHandler.DeleteClientConfig(clientId));
-            Debug.WriteLine("DISCONNTED CLIENT");
+            Task.Delay(TimeSpan.FromMinutes(5)).ContinueWith((task) => _connectionHandler.DeleteClientConfig(clientId));
             return Task.CompletedTask;
         }
 

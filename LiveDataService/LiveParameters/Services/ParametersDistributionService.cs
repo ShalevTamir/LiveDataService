@@ -3,6 +3,7 @@ using LiveDataService.LiveParameters.Models;
 using LiveDataService.LiveParameters.Models.Dtos;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,12 +26,16 @@ namespace LiveDataService.LiveParameters.Services
             var telemetryFrame = JsonConvert.DeserializeObject<TelemetryFrameDto>(JTeleData);
             foreach(ClientConnection client in _connectionHandler.GetConnectedClients())
             {
-                IEnumerable<TelemetryParameterDto> requestedParameters = 
+                IEnumerable<TelemetryParameterDto> filteredParameters = 
                     telemetryFrame.Parameters.Where(parameter => client.ParameterNames.Contains(parameter.Name));
 
                 await _hubContext.Clients.Client(client.ConnectionId).SendAsync(
                     "receiveParameters",
-                    requestedParameters
+                    new FilteredFrameDto()
+                    {
+                        Parameters = filteredParameters,
+                        TimeStamp = new DateTimeOffset(telemetryFrame.TimeStamp).ToUnixTimeMilliseconds()
+                    }
                     );
             }
                 
