@@ -35,6 +35,7 @@ namespace LiveDataService.LiveParameters.Services
 
         public bool ConnectClient(string clientId, string connectionId)
         {
+            //hub context already saves connected clients
             var client = _clientConnections.Find(client => client.ClientId == clientId);
             client?.Connect(connectionId);
             return client != null;

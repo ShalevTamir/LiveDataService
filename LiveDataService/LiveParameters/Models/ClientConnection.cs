@@ -14,6 +14,7 @@ namespace LiveDataService.LiveParameters.Models
         {            
             ClientId = Guid.NewGuid().ToString();
             ParameterNames = parameterNames;
+            //change to default
             ConnectionId = null;
         }
 

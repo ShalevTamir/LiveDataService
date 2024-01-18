@@ -24,6 +24,7 @@ namespace LiveDataService.LiveParameters.Services
         public async Task ProccessTeleData(string JTeleData)
         {
             var telemetryFrame = JsonConvert.DeserializeObject<TelemetryFrameDto>(JTeleData);
+            //parallel foreach
             foreach(ClientConnection client in _connectionHandler.GetConnectedClients())
             {
                 IEnumerable<TelemetryParameterDto> filteredParameters = 

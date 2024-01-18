@@ -20,7 +20,7 @@ namespace LiveDataService.LiveParameters.Controllers
         }
 
         [HttpPost]
-        public ActionResult InitiateSocket([FromBody] ParametersListDto parametersList)
+        public ActionResult ConfigSocket([FromBody] ParametersListDto parametersList)
         {
             ClientConnection client = new ClientConnection(parametersList.ParameterNames); 
             _clientConnectionHandler.ConfigClient(client);
