@@ -25,6 +25,7 @@ namespace LiveDataService
             services.AddSingleton<KafkaConsumerService>();
             services.AddSingleton<ClientConnectionHandler>();
             services.AddSingleton<ParametersDistributionService>();
+            services.AddSingleton<JsonUtilsService>();
             services.AddHostedService<StartupService>();
 
             services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
