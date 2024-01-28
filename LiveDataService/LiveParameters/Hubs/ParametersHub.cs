@@ -17,10 +17,22 @@ namespace LiveDataService.LiveParameters.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            string clientId = _connectionHandler.GetClientConnection(Context.ConnectionId).ClientId;
-            _connectionHandler.DisconnectClient(Context.ConnectionId);
-            //add cancelation token
-            await Task.Delay(TimeSpan.FromMinutes(5)).ContinueWith((task) => _connectionHandler.DeleteClientConfig(clientId));
+            var clientConnection = _connectionHandler.GetClientConnection(Context.ConnectionId);
+            if(clientConnection != null)
+            {
+                var cancellationToken = clientConnection.cancelDisconnectToken.Token;
+                string clientId = clientConnection.ClientId;
+                _connectionHandler.DisconnectClient(Context.ConnectionId);
+                await Task.Delay(
+                    TimeSpan.FromMinutes(5)
+                    ).ContinueWith((task) => {
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            Debug.WriteLine("deleted");
+                            _connectionHandler.DeleteClientConfig(clientId); 
+                        }
+                    });
+            }
         }
 
 

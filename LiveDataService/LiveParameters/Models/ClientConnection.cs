@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace LiveDataService.LiveParameters.Models
 {
@@ -8,6 +9,7 @@ namespace LiveDataService.LiveParameters.Models
         public string ClientId {  get; private set; }
         public string ConnectionId { get; private set; }
         public HashSet<string> ParameterNames { get; private set; }
+        public CancellationTokenSource cancelDisconnectToken { get; private set; }
         
 
         public ClientConnection(HashSet<string> parameterNames)
@@ -16,6 +18,7 @@ namespace LiveDataService.LiveParameters.Models
             ParameterNames = parameterNames;
             //change to default
             ConnectionId = null;
+            cancelDisconnectToken = new CancellationTokenSource();
         }
 
         public ClientConnection(List<string> parameterNames) :
@@ -25,6 +28,8 @@ namespace LiveDataService.LiveParameters.Models
 
         public void Connect(string connectionId)
         {
+            cancelDisconnectToken.Cancel();
+            cancelDisconnectToken = new CancellationTokenSource();
             this.ConnectionId = connectionId;
         }
 

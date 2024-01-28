@@ -52,7 +52,7 @@ namespace LiveDataService.LiveParameters.Services
             return _clientConnections.Where(client => client.IsConnected());
         }
 
-        public ClientConnection GetClientConnection(string connectionId)
+        public ClientConnection? GetClientConnection(string connectionId)
         {
             return _clientConnections.Find(client => client.ConnectionId == connectionId);
         }
