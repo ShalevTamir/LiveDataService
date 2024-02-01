@@ -5,7 +5,5 @@
         public string ParameterName;
         public string MinValue;
         public string MaxValue;
-
-
     }
 }

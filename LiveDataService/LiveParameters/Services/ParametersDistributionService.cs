@@ -21,9 +21,8 @@ namespace LiveDataService.LiveParameters.Services
             _hubContext = hubContext;
         }
 
-        public async Task ProccessTeleData(string JTeleData)
+        public async Task ProccessTeleData(TelemetryFrameDto telemetryFrame)
         {
-            var telemetryFrame = JsonConvert.DeserializeObject<TelemetryFrameDto>(JTeleData);
             //parallel foreach
             foreach(ClientConnection client in _connectionHandler.GetConnectedClients())
             {

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace LiveDataService.LiveParameters.Controllers
 {
@@ -18,7 +19,7 @@ namespace LiveDataService.LiveParameters.Controllers
             _icdParameters = jsonUtilsService.DeserializeIcdFile();
         }
 
-        [HttpPost]
+        [HttpPost("parameter-ranges")]
         public ActionResult GetSensorsRanges([FromBody] ParametersListDto parametersList)
         {
             return Ok(JsonConvert.SerializeObject(_icdParameters
@@ -29,6 +30,14 @@ namespace LiveDataService.LiveParameters.Controllers
                     MaxValue = parameter.MaxValue 
                 })));
              
+        }
+
+        [HttpGet("parameter-names")]
+        public ActionResult GetParameterNames()
+        {
+            return Ok(JsonConvert.SerializeObject(_icdParameters
+                .Select((parameter) => parameter.ParameterName)
+                ));
         }
     }
 }

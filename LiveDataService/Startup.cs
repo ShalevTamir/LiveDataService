@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.SignalR;
 using LiveDataService.LiveParameters.Hubs;
 using LiveDataService.LiveParameters.Services;
 using LiveDataService.Consumer.Services;
+using LiveDataService.Mongo.Models;
+using ZstdSharp.Unsafe;
+using LiveDataService.Mongo.Services;
 
 namespace LiveDataService
 {
@@ -26,6 +29,8 @@ namespace LiveDataService
             services.AddSingleton<ClientConnectionHandler>();
             services.AddSingleton<ParametersDistributionService>();
             services.AddSingleton<JsonUtilsService>();
+            services.AddSingleton<MongoFramesService>();
+            services.AddSingleton<TeleProcessorService>();
             services.AddHostedService<StartupService>();
 
             services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
