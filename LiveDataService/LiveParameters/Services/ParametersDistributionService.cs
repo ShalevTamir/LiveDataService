@@ -1,4 +1,5 @@
-﻿using LiveDataService.LiveParameters.Hubs;
+﻿using LiveDataService.Common.Extentions;
+using LiveDataService.LiveParameters.Hubs;
 using LiveDataService.LiveParameters.Models;
 using LiveDataService.LiveParameters.Models.Dtos;
 using Microsoft.AspNetCore.SignalR;
@@ -34,7 +35,7 @@ namespace LiveDataService.LiveParameters.Services
                     new FilteredFrameDto()
                     {
                         Parameters = filteredParameters,
-                        TimeStamp = new DateTimeOffset(telemetryFrame.TimeStamp).ToUnixTimeMilliseconds()
+                        TimeStamp = telemetryFrame.TimeStamp.ToUnix()
                     }
                     );
             }

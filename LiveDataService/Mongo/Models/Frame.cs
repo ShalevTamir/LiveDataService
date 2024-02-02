@@ -10,7 +10,7 @@ namespace LiveDataService.Mongo.Models
         public ObjectId _id { get; set; }
 
         [BsonElement("timestamp")]
-        public string TimeStamp { get; set; }
+        public long TimeStamp { get; set; }
 
         [BsonElement("parameters")]
         public List<TelemetryParameterDto> Parameters;

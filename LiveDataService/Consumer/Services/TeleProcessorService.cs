@@ -1,4 +1,5 @@
-﻿using LiveDataService.LiveParameters.Models.Dtos;
+﻿using LiveDataService.Common.Extentions;
+using LiveDataService.LiveParameters.Models.Dtos;
 using LiveDataService.LiveParameters.Services;
 using LiveDataService.Mongo.Services;
 using Newtonsoft.Json;
@@ -29,7 +30,7 @@ namespace LiveDataService.Consumer.Services
             await _mongoFramesService.InsertAsync(new Mongo.Models.Frame()
             {
                 Parameters = telemetryFrame.Parameters.ToList(),
-                TimeStamp = telemetryFrame.TimeStamp.ToString(),
+                TimeStamp = telemetryFrame.TimeStamp.ToUnix(),
             });
         }
     }

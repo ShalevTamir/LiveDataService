@@ -1,5 +1,4 @@
-﻿using LiveDataService.LiveParameters.Hubs;
-using LiveDataService.LiveParameters.Models;
+﻿using LiveDataService.LiveParameters.Models;
 using LiveDataService.LiveParameters.Models.Dtos;
 using LiveDataService.LiveParameters.Services;
 using Microsoft.AspNetCore.Mvc;
