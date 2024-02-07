@@ -1,7 +1,7 @@
-﻿using LiveDataService.Mongo.Models.FramesController;
-using LiveDataService.Mongo.Services;
+﻿using LiveDataService.Mongo.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace LiveDataService.Mongo.Controllers
@@ -16,14 +16,30 @@ namespace LiveDataService.Mongo.Controllers
             _mongoFramesService = mongoFramesService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetFrames([FromQuery]GetFramesQueryParams queryParams)
+        [HttpGet("count")]
+        public async Task<ActionResult> CountFrames([Required] long MinTimeStamp, [Required] long MaxTimeStamp)
+        {
+            return Ok(JsonConvert.SerializeObject(new {
+                Count = await _mongoFramesService.CountFrames(MinTimeStamp, MaxTimeStamp)
+                }));
+        }
+
+        [HttpGet()]
+        public async Task<ActionResult> GetFrames(
+                                                  [Required]
+                                                  long MinTimeStamp,
+                                                  [Required]
+                                                  long MaxTimeStamp,
+                                                  [Required]
+                                                  int MaxSamplesInPage,
+                                                  [Required]
+                                                  int PageNumber)
         {            
             return Ok(JsonConvert.SerializeObject(await _mongoFramesService.GetFrames(
-                queryParams.MinTimeStamp,
-                queryParams.MaxTimeStamp,
-                queryParams.MaxSamplesInPage,
-                queryParams.PageNumber
+                MinTimeStamp,
+                MaxTimeStamp,
+                MaxSamplesInPage,
+                PageNumber
                 )));   
         }
     }

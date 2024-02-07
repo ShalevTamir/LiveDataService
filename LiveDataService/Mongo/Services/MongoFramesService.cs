@@ -26,6 +26,16 @@ namespace LiveDataService.Mongo.Services
         public async Task InsertAsync(Frame frame) =>
             await _framesCollection.InsertOneAsync(frame);
 
+        public async Task<long> CountFrames(long minTimeSpan, long maxTimeSpan)
+        {
+            FilterDefinition<Frame> filter = Builders<Frame>.Filter.And(
+                Builders<Frame>.Filter.Gt(TIMESTAMP_MONGO_KEY, minTimeSpan),
+                Builders<Frame>.Filter.Lt(TIMESTAMP_MONGO_KEY, maxTimeSpan)
+                );
+            var count =  await _framesCollection.CountDocumentsAsync(filter);
+            return count;
+        }
+
         public async Task<List<Frame>> GetFrames(long minTimeSpan, long maxTimeSpan, int maxSamplesInPage, int pageNumber)
         {
             var findOptions = new FindOptions<Frame> { 
@@ -37,6 +47,7 @@ namespace LiveDataService.Mongo.Services
                 Builders<Frame>.Filter.Gt(TIMESTAMP_MONGO_KEY, minTimeSpan),
                 Builders<Frame>.Filter.Lt(TIMESTAMP_MONGO_KEY, maxTimeSpan)
                 );
+            
             using (IAsyncCursor<Frame> cursor = await _framesCollection.FindAsync(filter, findOptions))
             {
                 return cursor.ToList();
