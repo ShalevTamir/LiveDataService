@@ -17,7 +17,7 @@ namespace LiveDataService.LiveParameters.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var clientConnection = _connectionHandler.GetClientConnection(Context.ConnectionId);
+            var clientConnection = _connectionHandler.GetConnectionByConnectionId(Context.ConnectionId);
             if(clientConnection != null)
             {
                 var cancellationToken = clientConnection.cancelDisconnectToken.Token;

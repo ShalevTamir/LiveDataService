@@ -26,6 +26,11 @@ namespace LiveDataService.LiveParameters.Models
         {
         }
 
+        public void AddParameter(string parameterName)
+        {
+            this.ParameterNames.Add(parameterName);
+        }
+
         public void Connect(string connectionId)
         {
             cancelDisconnectToken.Cancel();

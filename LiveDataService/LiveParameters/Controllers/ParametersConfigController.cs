@@ -14,6 +14,7 @@ namespace LiveDataService.LiveParameters.Controllers
     public class ParametersConfigController : Controller
     {
         private readonly IEnumerable<IcdParameter> _icdParameters;
+        private const string CORRELATOR_NAME = "Correlator";
         public ParametersConfigController(JsonUtilsService jsonUtilsService) 
         {
             _icdParameters = jsonUtilsService.DeserializeIcdFile();
@@ -36,7 +37,7 @@ namespace LiveDataService.LiveParameters.Controllers
         public ActionResult GetParameterNames()
         {
             return Ok(JsonConvert.SerializeObject(_icdParameters
-                .Select((parameter) => parameter.ParameterName)
+                .Select((parameter) => parameter.ParameterName).Where((parameter) => parameter != CORRELATOR_NAME)
                 ));
         }
     }

@@ -4,6 +4,8 @@ using LiveDataService.LiveParameters.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Linq;
 
 namespace LiveDataService.LiveParameters.Controllers
 {
@@ -18,7 +20,7 @@ namespace LiveDataService.LiveParameters.Controllers
             _clientConnectionHandler = clientConnectionHandler;
         }
 
-        [HttpPost]
+        [HttpPost("config")]
         public ActionResult ConfigSocket([FromBody] ParametersListDto parametersList)
         {
             ClientConnection client = new ClientConnection(parametersList.ParameterNames); 
@@ -29,6 +31,22 @@ namespace LiveDataService.LiveParameters.Controllers
                     new ClientConnectionId() { ConnectionId = client.ClientId }
                     )
                 );
+        }
+
+        [HttpPost("add-parameter")]
+        public ActionResult AddParameter([FromBody] AddParameterDto addParameterDto)
+        {
+            ClientConnection? clientConnection = _clientConnectionHandler.GetConnectionByClientId(addParameterDto.ClientId);
+            if (clientConnection == null)
+            {
+                return BadRequest("Client isn't registered in the server");
+            }
+            else
+            {
+                clientConnection.AddParameter(addParameterDto.ParameterName);
+                return Ok();
+            }
+
         }
     }
 }
