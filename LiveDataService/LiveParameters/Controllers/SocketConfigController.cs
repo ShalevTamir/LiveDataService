@@ -34,19 +34,34 @@ namespace LiveDataService.LiveParameters.Controllers
         }
 
         [HttpPost("add-parameter")]
-        public ActionResult AddParameter([FromBody] AddParameterDto addParameterDto)
+        public ActionResult AddParameter([FromBody] ModifyParametersDto parameterToAdd)
         {
-            ClientConnection? clientConnection = _clientConnectionHandler.GetConnectionByClientId(addParameterDto.ClientId);
+            ClientConnection? clientConnection = _clientConnectionHandler.GetConnectionByClientId(parameterToAdd.ClientId);
             if (clientConnection == null)
             {
                 return BadRequest("Client isn't registered in the server");
             }
             else
             {
-                clientConnection.AddParameter(addParameterDto.ParameterName);
+                clientConnection.AddParameter(parameterToAdd.ParameterName);
                 return Ok();
             }
 
+        }
+
+        [HttpPost("remove-parameter")]
+        public ActionResult RemoveParameter([FromBody] ModifyParametersDto parameterToRemove)
+        {
+            ClientConnection? clientConnection = _clientConnectionHandler.GetConnectionByClientId(parameterToRemove.ClientId);
+            if (clientConnection == null)
+            {
+                return BadRequest("Client isn't registered in the server");
+            }
+            else
+            {
+                clientConnection.RemoveParameter(parameterToRemove.ParameterName);
+                return Ok();
+            }
         }
     }
 }

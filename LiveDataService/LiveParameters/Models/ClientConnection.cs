@@ -31,6 +31,11 @@ namespace LiveDataService.LiveParameters.Models
             this.ParameterNames.Add(parameterName);
         }
 
+        public void RemoveParameter(string parameterName)
+        {
+            this.ParameterNames.Remove(parameterName);
+        }
+
         public void Connect(string connectionId)
         {
             cancelDisconnectToken.Cancel();
