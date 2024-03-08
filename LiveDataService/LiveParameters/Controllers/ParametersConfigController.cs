@@ -20,7 +20,7 @@ namespace LiveDataService.LiveParameters.Controllers
             _icdParameters = jsonUtilsService.DeserializeIcdFile();
         }
 
-        [HttpPost("parameter-ranges")]
+        [HttpPost("parameters-data")]
         public ActionResult GetSensorsRanges([FromBody] ParametersListDto parametersList)
         {
             return Ok(JsonConvert.SerializeObject(_icdParameters
@@ -28,7 +28,8 @@ namespace LiveDataService.LiveParameters.Controllers
                 .Select(parameter => new ParameterRangeDto() { 
                     ParameterName = parameter.ParameterName,
                     MinValue = parameter.MinValue,
-                    MaxValue = parameter.MaxValue 
+                    MaxValue = parameter.MaxValue,
+                    Units = parameter.Units
                 })));
              
         }

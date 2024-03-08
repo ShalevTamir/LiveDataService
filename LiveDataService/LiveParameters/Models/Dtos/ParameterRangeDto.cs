@@ -5,5 +5,6 @@
         public string ParameterName;
         public string MinValue;
         public string MaxValue;
+        public string Units;
     }
 }
