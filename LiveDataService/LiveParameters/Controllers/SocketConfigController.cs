@@ -1,6 +1,7 @@
 ﻿using LiveDataService.LiveParameters.Models;
 using LiveDataService.LiveParameters.Models.Dtos;
 using LiveDataService.LiveParameters.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using System.Linq;
 
 namespace LiveDataService.LiveParameters.Controllers
 {
+    [Authorize]
     [Route("socket-config")]
     [ApiController]
     public class SocketConfigController : Controller

@@ -1,6 +1,7 @@
 ﻿using LiveDataService.LiveParameters.Models;
 using LiveDataService.LiveParameters.Models.Dtos;
 using LiveDataService.LiveParameters.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace LiveDataService.LiveParameters.Controllers
 {
+    [Authorize]
     [Route("parameters-config")]
     [ApiController]
     public class ParametersConfigController : Controller

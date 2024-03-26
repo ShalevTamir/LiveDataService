@@ -1,4 +1,5 @@
 ﻿using LiveDataService.Mongo.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace LiveDataService.Mongo.Controllers
 {
+    [Authorize]
     [Route("[Controller]")]
     [ApiController]
     public class FramesController: Controller

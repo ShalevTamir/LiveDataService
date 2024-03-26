@@ -14,6 +14,7 @@ using LiveDataService.Consumer.Services;
 using LiveDataService.Mongo.Models;
 using ZstdSharp.Unsafe;
 using LiveDataService.Mongo.Services;
+using JwtAuth.Middlewares;
 
 namespace LiveDataService
 {
@@ -45,7 +46,7 @@ namespace LiveDataService
                 .AddJsonProtocol(options => {
                     options.PayloadSerializerOptions.PropertyNamingPolicy = null;
                 });
-
+            services.AddTokenAuthentication();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +57,9 @@ namespace LiveDataService
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseRouting();
+            app.UseAuthorization();
 
             app.UseCors("CorsPolicy");
 
