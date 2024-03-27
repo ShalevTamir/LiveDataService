@@ -1,13 +1,18 @@
 ﻿using LiveDataService.LiveParameters.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Diagnostics;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace LiveDataService.LiveParameters.Hubs
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ParametersHub: Hub
     {
+        public static readonly string Endpoint = "/live-parameters-socket";
         private ClientConnectionHandler _connectionHandler;
         public ParametersHub(ClientConnectionHandler connectionHandler) 
         {

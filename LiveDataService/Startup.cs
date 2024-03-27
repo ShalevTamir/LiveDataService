@@ -46,7 +46,7 @@ namespace LiveDataService
                 .AddJsonProtocol(options => {
                     options.PayloadSerializerOptions.PropertyNamingPolicy = null;
                 });
-            services.AddTokenAuthentication();
+            services.AddTokenAuthentication(new string[] {ParametersHub.Endpoint});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,7 +65,7 @@ namespace LiveDataService
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<ParametersHub>("/live-parameters-socket");
+                endpoints.MapHub<ParametersHub>(ParametersHub.Endpoint);
                 endpoints.MapControllers();
             });
         }
