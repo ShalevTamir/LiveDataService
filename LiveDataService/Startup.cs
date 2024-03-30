@@ -14,8 +14,7 @@ using LiveDataService.Consumer.Services;
 using LiveDataService.Mongo.Models;
 using ZstdSharp.Unsafe;
 using LiveDataService.Mongo.Services;
-using JwtAuth.Middlewares;
-using JwtAuth.Middlewares.Extentions;
+using AuthService.Middlewares.Extentions;
 
 namespace LiveDataService
 {
