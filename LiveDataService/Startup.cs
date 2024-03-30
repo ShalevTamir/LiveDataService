@@ -15,6 +15,7 @@ using LiveDataService.Mongo.Models;
 using ZstdSharp.Unsafe;
 using LiveDataService.Mongo.Services;
 using JwtAuth.Middlewares;
+using JwtAuth.Middlewares.Extentions;
 
 namespace LiveDataService
 {
@@ -57,11 +58,13 @@ namespace LiveDataService
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseTokenMessage();
+            app.UseCors("CorsPolicy");
+
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
 
-            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
